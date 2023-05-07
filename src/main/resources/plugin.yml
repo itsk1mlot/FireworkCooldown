@@ -1,0 +1,9 @@
+name: FireworkCooldown
+main: io.github.itsk1mlot.rocketcool.Main
+version: 1.0
+api-version: 1.19
+author: ITSK1MLOT
+
+commands:
+  firework:
+    description: Firework Commands
