@@ -14,16 +14,22 @@ class Interact: Listener {
     fun onInteract(event: PlayerInteractEvent) {
         val player = event.player
         val seconds = Main.instance.config.getInt("cooldown")
+        val cooldownMessage = Main.instance.config.getString("message.cooldown") as String
         val ct = event.action
 
         if (ct.isRightClick) {
             if (player.inventory.itemInMainHand.type == Material.FIREWORK_ROCKET || player.inventory.itemInOffHand.type == Material.FIREWORK_ROCKET) {
-                if (player.hasCooldown(Material.FIREWORK_ROCKET)) {
-                    player.sendMessage(Component.text("§6[FireworkCooldown] §c아직 쿨다운이 ${Convert.toSeconds(player.getCooldown(Material.FIREWORK_ROCKET))}초 남았습니다!"))
-                } else {
-                    Bukkit.getScheduler().runTaskLater(Main.instance, Runnable {
-                        player.setCooldown(Material.FIREWORK_ROCKET, Convert.toTick(seconds))
-                    }, 2)
+                if (!player.hasPermission("firework.bypass")) {
+                    if (player.hasCooldown(Material.FIREWORK_ROCKET)) {
+                        val cooldown = player.getCooldown(Material.FIREWORK_ROCKET)
+                        val cooldownString = "${Convert.toSeconds(cooldown)}"
+                        val cooldownMessageLast = cooldownMessage.replace("[seconds]", cooldownString)
+                        player.sendActionBar(Component.text(cooldownMessageLast))
+                    } else {
+                        Bukkit.getScheduler().runTaskLater(Main.instance, Runnable {
+                            player.setCooldown(Material.FIREWORK_ROCKET, Convert.toTick(seconds))
+                        }, 1)
+                    }
                 }
             }
         }

@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "io.github.itsk1mlot.rocketcool"
-version = "1.0"
+version = "1.2"
 
 val testServerDir: String by project
 
